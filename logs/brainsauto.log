@@ -3673,3 +3673,54 @@
 2026-07-19 17:26:11  INFO      [src.automation]  [ENS_mid_model_673_res_v1_174] Margin 0.00279 too low
 2026-07-19 17:26:11  INFO      [src.automation]  [✓] ENS_mid_model_673_res_v1_174 → TEST_FAIL
 2026-07-19 17:26:12  INFO      [src.automation]  [val_alpha_699] Polling simulation 2B3NlTaPV4xg8JI1gNdxkM3i…
+2026-07-19 17:26:12  INFO      [src.automation]  [val_alpha_699] UNKNOWN (10.0%)
+2026-07-19 17:26:18  INFO      [src.automation]  [val_alpha_699] UNKNOWN (10.0%)
+2026-07-19 17:26:22  INFO      [src.automation]  [val_alpha_699] UNKNOWN (10.0%)
+2026-07-19 17:26:29  INFO      [src.automation]  [val_alpha_699] ERROR
+2026-07-19 17:26:29  WARNING   [src.automation]  [val_alpha_699] No test cases returned by API.
+2026-07-19 17:26:29  INFO      [src.automation]  [✗] val_alpha_699 → FAILED
+2026-07-19 17:26:29  INFO      [src.automation]  [val_strat_337] Polling simulation 1dWLZeLZ4ROc3o1gnUNuYiL…
+2026-07-19 17:26:30  INFO      [src.automation]  [val_strat_337] UNKNOWN (10.0%)
+2026-07-19 17:26:33  INFO      [src.automation]  [val_strat_337] ERROR
+2026-07-19 17:26:33  WARNING   [src.automation]  [val_strat_337] No test cases returned by API.
+2026-07-19 17:26:33  INFO      [src.automation]  [✗] val_strat_337 → FAILED
+2026-07-19 17:27:11  INFO      [src.automation]  [val_idea_154] Polling simulation WfusC4794YSctP3ugjFTT7…
+2026-07-19 17:27:13  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:27:25  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:27:32  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:27:36  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:27:40  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:27:46  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:27:53  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:27:58  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:03  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:10  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:16  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:20  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:27  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:33  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:39  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:45  INFO      [src.automation]  [val_idea_154] UNKNOWN (35.0%)
+2026-07-19 17:28:49  INFO      [src.automation]  [val_idea_154] COMPLETE
+2026-07-19 17:28:50  WARNING   [src.automation]  [val_idea_154] ✗ Failed checks: LOW_SHARPE, LOW_FITNESS
+2026-07-19 17:28:50  INFO      [src.automation]  [val_idea_154] Sharpe 0.210 below threshold
+2026-07-19 17:28:50  INFO      [src.automation]  [val_idea_154] Fitness 0.080 below threshold
+2026-07-19 17:28:50  INFO      [src.automation]  [val_idea_154] Margin 0.00029 too low
+2026-07-19 17:28:50  INFO      [src.automation]  [✓] val_idea_154 → TEST_FAIL
+2026-07-19 17:28:50  INFO      [src.automation]  [res_model_562] Polling simulation 2qftpqhQ4v5chfxzRaQiiY…
+2026-07-19 17:28:51  INFO      [src.automation]  [res_model_562] UNKNOWN (10.0%)
+2026-07-19 17:29:00  INFO      [src.automation]  [res_model_562] UNKNOWN (15.0%)
+2026-07-19 17:29:06  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:10  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:15  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:19  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:25  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:31  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:37  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:44  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:50  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:29:57  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:30:04  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:30:09  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:30:13  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:30:18  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
