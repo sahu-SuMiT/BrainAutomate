@@ -166,7 +166,7 @@ class RateLimitGuard:
     def __init__(
         self,
         daily_limit: int = 100,           # Brain limit per day (adjust for your tier)
-        min_gap_seconds: float = 3.0,     # Minimum seconds between submissions
+        min_gap_seconds: float = 6.5,     # Seconds between submissions (jitter ±20% → 5.2–7.8s range)
         warn_pct: float = 0.85,           # Warn and slow down at 85% of daily limit
     ):
         self.daily_limit     = daily_limit
@@ -497,7 +497,7 @@ class Guardian:
     def __init__(
         self,
         daily_limit: int   = 100,
-        min_gap_seconds: float = 3.0,
+        min_gap_seconds: float = 6.5,
         max_self_correlation: float = 0.80,
         max_intra_batch_similarity: float = 0.90,
     ):
