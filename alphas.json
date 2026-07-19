@@ -1,0 +1,572 @@
+[
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(close)",
+    "name": "Gen_1"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(close / ts_min(close, 20))",
+    "name": "Gen_2"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(close, 10))",
+    "name": "Gen_3"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_max(close, 30))",
+    "name": "Gen_4"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(close, 10))",
+    "name": "Gen_5"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(volume)",
+    "name": "Gen_6"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(volume / ts_min(volume, 5))",
+    "name": "Gen_7"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(volume, 30))",
+    "name": "Gen_8"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(volume / ts_min(volume, 10))",
+    "name": "Gen_9"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(volume / ts_mean(volume, 20))",
+    "name": "Gen_10"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(open)",
+    "name": "Gen_11"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(open, 5))",
+    "name": "Gen_12"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(open, 20))",
+    "name": "Gen_13"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_max(open, 30))",
+    "name": "Gen_14"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(open / ts_min(open, 20))",
+    "name": "Gen_15"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(returns)",
+    "name": "Gen_16"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(returns / ts_max(returns, 20))",
+    "name": "Gen_17"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(returns, 5))",
+    "name": "Gen_18"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(returns, 5))",
+    "name": "Gen_19"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(returns, 20))",
+    "name": "Gen_20"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(cap)",
+    "name": "Gen_21"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(cap / ts_mean(cap, 10))",
+    "name": "Gen_22"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_mean(cap, 10))",
+    "name": "Gen_23"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_max(cap, 30))",
+    "name": "Gen_24"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(cap, 10))",
+    "name": "Gen_25"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(vwap)",
+    "name": "Gen_26"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(vwap / ts_min(vwap, 10))",
+    "name": "Gen_27"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_min(vwap, 30))",
+    "name": "Gen_28"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(ts_max(vwap, 5))",
+    "name": "Gen_29"
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 0,
+      "neutralization": "MARKET",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "rank(vwap / ts_max(vwap, 5))",
+    "name": "Gen_30"
+  }
+]

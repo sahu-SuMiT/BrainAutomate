@@ -1,0 +1,4 @@
+timestamp,alpha_name,simulation_id,status,tests_pass,auto_submit
+2026-07-19T14:49:50.825693,TS_40,2V6cyf5Wm4Uz9FrERKycKKN,FAILED,True,False
+2026-07-19T14:50:37.006834,TS_58,3PJtN158h4uy8KQBnZQqyBs,FAILED,True,False
+2026-07-19T14:51:10.726483,MF_10055,iY7B67Ew4nZ8J3BLGPOqUh,FAILED,True,False

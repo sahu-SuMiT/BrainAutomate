@@ -1,0 +1,70 @@
+import csv
+import json
+import logging
+from datetime import datetime
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+RESULTS_DIR = Path("results")
+
+
+class ResultLogger:
+    """
+    Persists simulation results to both a JSON lines file and a CSV file
+    under ./results/ so you can review outcomes after a run.
+
+    Files created:
+        results/run_<timestamp>.jsonl
+        results/run_<timestamp>.csv
+    """
+
+    def __init__(self):
+        RESULTS_DIR.mkdir(exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.jsonl_path = RESULTS_DIR / f"run_{ts}.jsonl"
+        self.csv_path = RESULTS_DIR / f"run_{ts}.csv"
+        self._csv_initialized = False
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
+
+    def record(self, alpha_name: str, sim_id: str, status: str, details: dict = None):
+        """
+        Persist one simulation result.
+
+        Parameters
+        ----------
+        alpha_name : str
+        sim_id : str
+        status : str   One of SUCCESS | WARNING | ERROR | FAILED
+        details : dict Extra fields returned by the API (sharpe, fitness, etc.)
+        """
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "alpha_name": alpha_name,
+            "simulation_id": sim_id,
+            "status": status,
+            **(details or {}),
+        }
+        self._write_jsonl(entry)
+        self._write_csv(entry)
+        logger.info(f"Result recorded for {alpha_name}: {status}")
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+
+    def _write_jsonl(self, entry: dict):
+        with open(self.jsonl_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry) + "\n")
+
+    def _write_csv(self, entry: dict):
+        write_header = not self._csv_initialized
+        with open(self.csv_path, "a", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=entry.keys())
+            if write_header:
+                writer.writeheader()
+                self._csv_initialized = True
+            writer.writerow(entry)
