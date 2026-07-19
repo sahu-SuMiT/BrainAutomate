@@ -1,0 +1,476 @@
+[
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 4,
+      "neutralization": "MARKET",
+      "truncation": 0.09,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "group_rank(historical_volatility_90, subindustry)",
+    "name": "mid_v2_395",
+    "_meta": {
+      "field": "historical_volatility_90",
+      "op": "group_rank",
+      "lookback": null,
+      "kind": "cs",
+      "field_category": "price_volume"
+    }
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 2,
+      "neutralization": "SUBINDUSTRY",
+      "truncation": 0.07,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "group_neutralize(historical_volatility_30, market)",
+    "name": "fac_signal_748",
+    "_meta": {
+      "field": "historical_volatility_30",
+      "op": "group_neutralize",
+      "lookback": null,
+      "kind": "cs",
+      "field_category": "price_volume"
+    }
+  },
+  {
+    "type": "REGULAR",
+    "settings": {
+      "instrumentType": "EQUITY",
+      "region": "USA",
+      "universe": "TOP3000",
+      "delay": 1,
+      "decay": 6,
+      "neutralization": "SUBINDUSTRY",
+      "truncation": 0.08,
+      "unitHandling": "VERIFY",
+      "pasteurization": "ON",
+      "language": "FASTEXPR",
+      "visualization": false,
+      "nanHandling": "OFF"
+    },
+    "regular": "group_zscore(historical_volatility_30, subindustry)",
+    "name": "dyn_v1_318",
+    "_meta": {
+      "field": "historical_volatility_30",
+      "op": "group_zscore",
+      "lookback": null,
+      "kind": "cs",
+      "field_category": "price_volume"
+    }
+  },
+  {
+    "name": "ENS_ENS_fac_v2_339_ENS_fac_idea_92_dyn_idea_5_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_val_alpha_8",
+    "regular": "__historical__gvuFPrz4NLa7zDH4jsIfe",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_fac_v2_339_ENS_fac_idea_92_dyn_idea_5_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_val_alpha_8",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 1.33
+  },
+  {
+    "name": "ENS_ENS_mom_alpha_749_mom_strat_640_ENS_vol_strat_53_fac_v1_100",
+    "regular": "__historical__1zRyOi3uc4Kjayx18CKSTAOW",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_mom_alpha_749_mom_strat_640_ENS_vol_strat_53_fac_v1_100",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 1.12
+  },
+  {
+    "name": "ENS_ENS_adp_signal_902_mom_model_238_ENS_mom_alpha_749_fac_v1_100",
+    "regular": "__historical__2cyGQ7gMb4xJaz31fKrGa7od",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_adp_signal_902_mom_model_238_ENS_mom_alpha_749_fac_v1_100",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 1.06
+  },
+  {
+    "name": "ENS_ENS_mom_alpha_749_fac_v1_100_ENS_res_alpha_39_vol_strat_53",
+    "regular": "__historical__qNCQQ12x53v9J4oV3r7weu",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_mom_alpha_749_fac_v1_100_ENS_res_alpha_39_vol_strat_53",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 1.04
+  },
+  {
+    "name": "ENS_ENS_adp_signal_902_mom_model_238_ENS_mom_alpha_749_res_alpha_39",
+    "regular": "__historical__3Hfp3bHq4G4c8U18xr6ECUA",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_adp_signal_902_mom_model_238_ENS_mom_alpha_749_res_alpha_39",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.98
+  },
+  {
+    "name": "ENS_ENS_fac_v2_339_ENS_fac_idea_92_dyn_idea_5_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_sig_v1_602",
+    "regular": "__historical__2OjT8sjK5db9ztfNjv7kvA",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_fac_v2_339_ENS_fac_idea_92_dyn_idea_5_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_sig_v1_602",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.97
+  },
+  {
+    "name": "ENS_ENS_dyn_v1_904_mom_model_238_ENS_adp_signal_902_vol_v2_954",
+    "regular": "__historical__31HTAI7vH4lKbA5MpbmliG6",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_dyn_v1_904_mom_model_238_ENS_adp_signal_902_vol_v2_954",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.95
+  },
+  {
+    "name": "ENS_ENS_dyn_v1_904_adp_signal_902_ENS_mom_model_238_vol_v2_954",
+    "regular": "__historical__4iUeH06wn4k7aqb70J4MJWY",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_dyn_v1_904_adp_signal_902_ENS_mom_model_238_vol_v2_954",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.92
+  },
+  {
+    "name": "ENS_ENS_mom_alpha_749_res_alpha_39_ENS_res_alpha_39_vol_strat_53",
+    "regular": "__historical__BwVrd4Yc4Hob5QEJ5tIQIe",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_mom_alpha_749_res_alpha_39_ENS_res_alpha_39_vol_strat_53",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.91
+  },
+  {
+    "name": "ENS_ENS_fac_scan_968_adp_v1_683_ENS_sig_strat_735_mom_test_760",
+    "regular": "__historical__1gN3eN1ut4u2bdhJ6zRM9xm",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_fac_scan_968_adp_v1_683_ENS_sig_strat_735_mom_test_760",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.9
+  },
+  {
+    "name": "ENS_ENS_mom_alpha_749_vol_strat_53_ENS_mom_alpha_749_res_alpha_39",
+    "regular": "__historical__44o2TIaNq5dBbEQcsIeeJ7d",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_mom_alpha_749_vol_strat_53_ENS_mom_alpha_749_res_alpha_39",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.9
+  },
+  {
+    "name": "res_alpha_415",
+    "regular": "__historical__3L6443w4DqagiX3AOLQql",
+    "_meta": {
+      "op": "rank",
+      "field": "res_alpha_415",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.89
+  },
+  {
+    "name": "ENS_adp_strat_370_res_scan_80",
+    "regular": "__historical__7VbCB9LG4HK9xy14spWmT1e",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_adp_strat_370_res_scan_80",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.89
+  },
+  {
+    "name": "ENS_ENS_fac_v2_339_rev_alpha_711_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_sig_v1_602",
+    "regular": "__historical__3eMoag1M5hzcpvibO6M1DA",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_fac_v2_339_rev_alpha_711_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_sig_v1_602",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.88
+  },
+  {
+    "name": "ENS_mom_alpha_373_adp_idea_791",
+    "regular": "__historical__1tiqtjdSP4q0aEVfdKOyXns",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_mom_alpha_373_adp_idea_791",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.88
+  },
+  {
+    "name": "ENS_val_strat_921_fac_signal_761",
+    "regular": "__historical__1Nfbw8faj4P89rHNWoXQL1K",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_val_strat_921_fac_signal_761",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.87
+  },
+  {
+    "name": "ENS_val_strat_921_mom_alpha_373",
+    "regular": "__historical__2W9Y5AaSU4o7bgiLhzT3TY4",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_val_strat_921_mom_alpha_373",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.86
+  },
+  {
+    "name": "ENS_ENS_fac_scan_968_mid_scan_770_ENS_fac_scan_968_adp_v1_683",
+    "regular": "__historical__4Dx9imeXP4CP8JXSvd63Rc1",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_fac_scan_968_mid_scan_770_ENS_fac_scan_968_adp_v1_683",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.83
+  },
+  {
+    "name": "ENS_ENS_fac_scan_968_adp_v1_683_ENS_sig_strat_735_mid_scan_770",
+    "regular": "__historical__pUZb83Gy4hhbBC7XkEZ5mA",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_fac_scan_968_adp_v1_683_ENS_sig_strat_735_mid_scan_770",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.83
+  },
+  {
+    "name": "ENS_vol_strat_53_fac_v1_100",
+    "regular": "__historical__1BFIaZ2tk4V6bTH1b8ueibfq",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_vol_strat_53_fac_v1_100",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.81
+  },
+  {
+    "name": "ENS_adp_strat_370_mid_run_661",
+    "regular": "__historical__3iJWGmcVm50k8SioMyoXtl3",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_adp_strat_370_mid_run_661",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.81
+  },
+  {
+    "name": "res_model_720",
+    "regular": "__historical__155lWzbwC4D79PhIfL0uPPn",
+    "_meta": {
+      "op": "rank",
+      "field": "res_model_720",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.8
+  },
+  {
+    "name": "ENS_ENS_mom_alpha_749_vol_strat_53_ENS_mom_alpha_749_fac_v1_100",
+    "regular": "__historical__3CPyznmC4Bl8yD11003U6H5",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_mom_alpha_749_vol_strat_53_ENS_mom_alpha_749_fac_v1_100",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.8
+  },
+  {
+    "name": "ENS_ENS_dyn_v1_904_mom_model_238_ENS_dyn_v1_904_adp_signal_902",
+    "regular": "__historical__1sx3od1n94sL8UK11zCVXxbO",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_dyn_v1_904_mom_model_238_ENS_dyn_v1_904_adp_signal_902",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.78
+  },
+  {
+    "name": "ENS_rev_test_875_rev_run_676",
+    "regular": "__historical__2cCvPc2vI51ycL1nGDtEsJf",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_rev_test_875_rev_run_676",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.75
+  },
+  {
+    "name": "ENS_ENS_fac_v2_339_rev_alpha_711_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_val_alpha_8",
+    "regular": "__historical__3lNTsqaKC4SG8IJ13xtTZEwv",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_ENS_fac_v2_339_rev_alpha_711_ENS_ENS_fac_idea_92_mom_signal_264_ENS_fac_idea_92_val_alpha_8",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.74
+  },
+  {
+    "name": "ENS_rev_run_676_res_run_779",
+    "regular": "__historical__Lc3bKcqD4S18NyYWsfjczt",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_rev_run_676_res_run_779",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.74
+  },
+  {
+    "name": "res_strat_218",
+    "regular": "__historical__152wGS2yh53Hafa9IeCgGrd",
+    "_meta": {
+      "op": "rank",
+      "field": "res_strat_218",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.73
+  },
+  {
+    "name": "mom_strat_106",
+    "regular": "__historical__3grTOy6Zx4sqaRHFZlNng2B",
+    "_meta": {
+      "op": "rank",
+      "field": "mom_strat_106",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.72
+  },
+  {
+    "name": "ENS_dyn_run_321_res_v1_174",
+    "regular": "__historical__33sMU64W352L9rsgCyfuNpm",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_dyn_run_321_res_v1_174",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.72
+  },
+  {
+    "name": "ENS_fac_idea_92_dyn_idea_5",
+    "regular": "__historical__3nhSfF7zG4DRahHT6ij6C1P",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_fac_idea_92_dyn_idea_5",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.72
+  },
+  {
+    "name": "ENS_mom_alpha_59_ENS_fac_idea_92_dyn_idea_5",
+    "regular": "__historical__eMO5517E5528WWgm4T2dQp",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_mom_alpha_59_ENS_fac_idea_92_dyn_idea_5",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.72
+  },
+  {
+    "name": "MF_10063",
+    "regular": "__historical__ou32Q5c858R9PF98VYy53Z",
+    "_meta": {
+      "op": "rank",
+      "field": "MF_10063",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.71
+  },
+  {
+    "name": "ENS_mom_alpha_749_fac_v1_100",
+    "regular": "__historical__1mYpyPfE54T4cli12VzrH5qe",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_mom_alpha_749_fac_v1_100",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.7
+  },
+  {
+    "name": "ENS_adp_strat_370_mid_run_483",
+    "regular": "__historical__2dwf0S1RO4oEcHv9I6aUA4O",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_adp_strat_370_mid_run_483",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.7
+  },
+  {
+    "name": "ENS_adp_strat_370_rev_v1_126",
+    "regular": "__historical__10mNq599v4tC8Mw15I9xzHwv",
+    "_meta": {
+      "op": "rank",
+      "field": "ENS_adp_strat_370_rev_v1_126",
+      "field_category": "price_volume",
+      "kind": "historical_seed"
+    },
+    "_seed_sharpe": 0.7
+  }
+]

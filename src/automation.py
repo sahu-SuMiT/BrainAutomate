@@ -86,6 +86,10 @@ class AlphaAutomation:
         self.task_queue    = queue.Queue()
         self.result_logger = ResultLogger()
 
+        # Reload ensemble pool from previous runs so restarts keep good building blocks
+        if self.optimizer is not None:
+            self.optimizer.load_ensemble_pool()
+
         # Session-level state
         self._sims_this_session    = 0     # count for ramp-up logic
         self._ramp_up_limit        = random.randint(3, 8)  # randomized, not fixed at 5
@@ -201,6 +205,14 @@ class AlphaAutomation:
 
                 logger.info(f"[{'\u2713' if success else '\u2717'}] {name} → {status_label}")
 
+                # ── Log qualifying alphas to a dedicated file ─────────
+                if status_label == "QUALIFIES":
+                    self.result_logger.record_qualifying(
+                        alpha_name=name,
+                        sim_id=sim_id or "N/A",
+                        details=metrics,
+                    )
+
                 # ── Circuit breaker ───────────────────────────────────
                 with self._circuit_lock:
                     if status_label.startswith("FAILED") or status_label.startswith("SKIPPED"):
@@ -213,6 +225,8 @@ class AlphaAutomation:
                 # ── Feedback: learner + optimizer (serialized) ────────
                 sharpe  = metrics.get("sharpe")
                 fitness = metrics.get("fitness")
+                margin  = metrics.get("margin", 0.0)
+                SHARPE_TARGET = getattr(self.optimizer, "sharpe_target", 1.25)
 
                 with self._feedback_lock:
                     if self.optimizer is not None:
@@ -220,16 +234,43 @@ class AlphaAutomation:
                         if op:
                             self.optimizer.record_result(op, sharpe)
 
-                        if status_label == "BELOW_THRESHOLD" and sharpe is not None:
+                        # ── Update Pareto front on every successful result ──
+                        if success and sharpe is not None and fitness is not None:
+                            self.optimizer.pareto_front.update(
+                                name    = name,
+                                sharpe  = sharpe,
+                                fitness = fitness,
+                                margin  = margin or 0.0,
+                                meta    = alpha.get("_meta", {}),
+                            )
+
+                        # ── Near-miss handling: ANY alpha 0.85 ≤ sharpe < target ──
+                        # This is the most important resource: squeeze every
+                        # near-miss toward 1.25 via binary search + hill-climb.
+                        if sharpe is not None and 0.85 <= sharpe < SHARPE_TARGET:
                             for r in self.optimizer.refine_near_miss(alpha, sharpe):
                                 self.task_queue.put(r)
                             for c in self.optimizer.hill_climb_settings(alpha, sharpe):
                                 self.task_queue.put(c)
+                            # Strong near-miss (≥1.0): add to ensemble pool immediately
+                            # so it can be mutated by GeneticEvolver
+                            if sharpe >= 1.0:
+                                self.optimizer.add_to_ensemble(alpha)
+                                logger.info(
+                                    f"[NEAR-MISS ≥1.0] {name} (sharpe={sharpe:.3f}) "
+                                    f"→ seeded into ensemble pool for genetic mutation"
+                                )
+                        elif status_label == "BELOW_THRESHOLD" and sharpe is not None and sharpe < 0.85:
+                            # Weak result: only do settings hill-climb (not binary search)
+                            for c in self.optimizer.hill_climb_settings(alpha, sharpe):
+                                self.task_queue.put(c)
 
+                        # ── Flip highly negative alphas ──
                         if sharpe is not None and sharpe <= -1.0 and fitness is not None and fitness < 0:
                             for neg in self.optimizer.flip_negative_alpha(alpha, sharpe):
                                 self.task_queue.put(neg)
 
+                        # ── Ensemble pool: alphas that pass ≥3 tests but not all ──
                         if success and tests:
                             passed_tests = [c for c in tests if c.get("result") == "PASS"]
                             if len(passed_tests) >= 3 and not (tests_pass and quality_ok):
@@ -242,6 +283,7 @@ class AlphaAutomation:
 
                     if self.learner is not None:
                         self.learner.record(alpha, sharpe, metrics.get("fitness"), metrics.get("turnover"))
+                        self.learner.record_outcome(alpha, sharpe, fitness, tests_pass=tests_pass)
 
                         q_size = self.task_queue.qsize()
                         n_done = self.learner._model.n_samples
@@ -266,6 +308,7 @@ class AlphaAutomation:
                     sim_id=sim_id or "N/A",
                     status=status_label,
                     details=metrics,
+                    meta=alpha.get("_meta"),
                 )
 
                 self.task_queue.task_done()

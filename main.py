@@ -124,7 +124,7 @@ if __name__ == "__main__":
     client    = BrainAPIClient(CREDENTIALS)
     optimizer = AdaptiveOptimizer(sharpe_target=SHARPE_TARGET)
 
-    learner = Learner()
+    learner = Learner(sharpe_target=SHARPE_TARGET)
     learner.load_history()
 
     guardian = Guardian(
@@ -166,36 +166,73 @@ if __name__ == "__main__":
     )
     all_field_ids = pv_fields + other_fields
 
+    # Build a field → category lookup so _meta gets correctly tagged for the Learner
+    field_category_map = {}
+    for cat, fids in fields_by_cat.items():
+        for fid in fids:
+            field_category_map[fid] = cat
+
     # Deduplicate (in case an API call returned overlapping fields)
     seen = set()
     all_field_ids = [f for f in all_field_ids if not (f in seen or seen.add(f))]
 
     # ----------------------------------------------------------------
+    # Build field quota map — channels budget to proven fields
+    # Proven fields (best_sharpe >= 0.70): 3x candidates
+    # Unknown fields (never tested):        1x candidates
+    # Weak fields (best_sharpe < 0.00):     1 candidate minimum
+    # ----------------------------------------------------------------
+    BASE_N = 4   # base candidates per field
+    quota_map = learner.field_quota_map(all_field_ids, base_n=BASE_N)
+
+    # ----------------------------------------------------------------
     # Generate candidate pool using fetched fields
-    # Pool 1: Single-field (TS + CS operators against each field)
+    # Pool 1: Single-field (TS + CS operators) — quota-routed per field
     # Pool 2: Multi-field (ratio, zscore-diff, MACD, corr, group-neutral)
+    # Pool 3: Evolved (mutations + crossover of best historical expressions)
+    # Pool 4: Special ops (hump, kth_element, ts_step)
     # ----------------------------------------------------------------
     single_field = optimizer.generate_initial_pool(
         fields=all_field_ids,
-        n_per_field=6,
+        n_per_field=BASE_N,
+        field_category_map=field_category_map,
+        quota_map=quota_map,
     )
     multi_field = optimizer.generate_multi_field_pool(
         fields=all_field_ids,
-        price_fields=pv_fields,   # tells the generator which fields are PV for economic pairing
+        price_fields=pv_fields,
         max_pairs=20,
+        field_category_map=field_category_map,
+    )
+    evolved = optimizer.generate_evolved_pool(
+        fields=all_field_ids,
+        field_category_map=field_category_map,
+        max_candidates=50,
+        field_sharpe_map=learner.field_sharpe_map(),
+    )
+    special = optimizer.generate_special_ops_pool(
+        fields=all_field_ids,
+        field_category_map=field_category_map,
     )
 
     # Merge — guardian will expression-validate, deduplicate, filter toxic + correlated
-    all_alphas = single_field + multi_field
+    all_alphas = single_field + multi_field + evolved + special
     automation.add_tasks(all_alphas)
 
     print(f"\n{'='*60}")
-    print(f"  BrainAuto  –  {len(all_alphas)} candidates generated")
+    print(f"  BrainAuto  —  {len(all_alphas)} candidates generated")
     print(f"    {len(single_field)} single-field  +  {len(multi_field)} multi-field")
+    print(f"    {len(evolved)} evolved  +  {len(special)} special-ops")
+    print(f"    Operators: {len(__import__('src.optimizer', fromlist=['TS_UNARY_OPS']).TS_UNARY_OPS)} TS + 3 special (hump/kth_element/ts_step)")
     print(f"    {len(pv_fields)} price/vol fields  +  {len(other_fields)} analyst/fundamental")
+    # Show quota distribution
+    proven_fields  = [f for f in all_field_ids if quota_map.get(f, BASE_N) >= BASE_N * 3]
+    unknown_fields = [f for f in all_field_ids if quota_map.get(f, BASE_N) == BASE_N]
+    weak_fields    = [f for f in all_field_ids if quota_map.get(f, BASE_N) < BASE_N]
+    print(f"    Field quota: {len(proven_fields)} proven×{BASE_N*3}  {len(unknown_fields)} unknown×{BASE_N}  {len(weak_fields)} weak×1")
     print(f"  Auto-submit : {'ON' if AUTO_SUBMIT else 'OFF (dry run)'}")
     print(f"  Sharpe target: {SHARPE_TARGET}")
-    print(f"  Strategy: round-robin ops + multi-field + binary-search + hill-climb + ML ranking")
+    print(f"  Strategy: quota-routed + multi-field + genetic-evolution + goal-aligned UCB + Pareto")
     print(f"{'='*60}\n")
 
     automation.run_with_backoff(max_retries=5)
