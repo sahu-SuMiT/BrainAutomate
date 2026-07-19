@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+import threading
 from datetime import datetime
 from pathlib import Path
 
@@ -25,6 +26,7 @@ class ResultLogger:
         self.jsonl_path = RESULTS_DIR / f"run_{ts}.jsonl"
         self.csv_path = RESULTS_DIR / f"run_{ts}.csv"
         self._csv_initialized = False
+        self._lock = threading.Lock()   # Thread-safe file writes for parallel workers
 
     # ------------------------------------------------------------------
     # Public API
@@ -57,14 +59,16 @@ class ResultLogger:
     # ------------------------------------------------------------------
 
     def _write_jsonl(self, entry: dict):
-        with open(self.jsonl_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps(entry) + "\n")
+        with self._lock:
+            with open(self.jsonl_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(entry) + "\n")
 
     def _write_csv(self, entry: dict):
-        write_header = not self._csv_initialized
-        with open(self.csv_path, "a", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=entry.keys())
-            if write_header:
-                writer.writeheader()
-                self._csv_initialized = True
-            writer.writerow(entry)
+        with self._lock:
+            write_header = not self._csv_initialized
+            with open(self.csv_path, "a", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=entry.keys())
+                if write_header:
+                    writer.writeheader()
+                    self._csv_initialized = True
+                writer.writerow(entry)

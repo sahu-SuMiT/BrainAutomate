@@ -32,6 +32,7 @@ import math
 import time
 import random
 import logging
+import threading
 from datetime import date
 from pathlib import Path
 from collections import defaultdict
@@ -174,6 +175,7 @@ class RateLimitGuard:
         self._last_submit_ts = 0.0
         self._recent_429s    = 0
         self._quota          = self._load_quota()
+        self._submit_lock    = threading.Lock()   # Serialize submissions across parallel workers
 
     # ── Quota ──────────────────────────────────────────────────────────────
 
@@ -247,14 +249,19 @@ class RateLimitGuard:
             logger.info("429 counter reset after successful submission.")
 
     def enforce_cooldown(self):
-        """Block until the minimum gap has passed, with jitter to look human."""
-        elapsed = time.monotonic() - self._last_submit_ts
-        # Add ±20% jitter so the gap is never a perfectly regular interval
-        target_gap = self.min_gap * random.uniform(0.80, 1.20)
-        if elapsed < target_gap:
-            wait = target_gap - elapsed
-            logger.info(f"Rate-limit cooldown: sleeping {wait:.1f}s…")
-            time.sleep(wait)
+        """Block until the minimum gap has passed, with jitter to look human.
+        
+        Thread-safe: uses _submit_lock so only one worker submits at a time,
+        preventing two threads from both passing the rate-limit check simultaneously.
+        """
+        with self._submit_lock:
+            elapsed = time.monotonic() - self._last_submit_ts
+            # Add ±20% jitter so the gap is never a perfectly regular interval
+            target_gap = self.min_gap * random.uniform(0.80, 1.20)
+            if elapsed < target_gap:
+                wait = target_gap - elapsed
+                logger.info(f"Rate-limit cooldown: sleeping {wait:.1f}s…")
+                time.sleep(wait)
 
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -28,6 +28,7 @@ by learning weights for each feature dimension.
 import json
 import math
 import logging
+import threading
 from pathlib import Path
 from collections import defaultdict
 
@@ -193,6 +194,9 @@ class Learner:
         # Correlation matrix between (field, op) pairs → Sharpe  (used for exploration bonus)
         self._pair_results = defaultdict(list)
 
+        # Thread safety for parallel workers
+        self._lock = threading.Lock()
+
     # ──────────────────────────────────────────────────────────────
     # History loading
     # ──────────────────────────────────────────────────────────────
@@ -238,25 +242,26 @@ class Learner:
         if sharpe is None:
             return
 
-        meta = alpha.get("_meta", {})
-        self._update_model(meta, sharpe)
+        with self._lock:
+            meta = alpha.get("_meta", {})
+            self._update_model(meta, sharpe)
 
-        # Field-level stats
-        field = meta.get("field", "")
-        if field:
-            fs = self._field_stats[field]
-            fs["n"] += 1
-            fs["sum"] += sharpe
-            fs["best"] = max(fs["best"], sharpe)
+            # Field-level stats
+            field = meta.get("field", "")
+            if field:
+                fs = self._field_stats[field]
+                fs["n"] += 1
+                fs["sum"] += sharpe
+                fs["best"] = max(fs["best"], sharpe)
 
-        # Pair stats for exploration bonus
-        op = meta.get("op", "")
-        if field and op:
-            self._pair_results[(field, op)].append(sharpe)
+            # Pair stats for exploration bonus
+            op = meta.get("op", "")
+            if field and op:
+                self._pair_results[(field, op)].append(sharpe)
 
         logger.info(
             f"[Learner] Updated on sharpe={sharpe:.3f}  "
-            f"op={op}  lookback={meta.get('lookback')}  "
+            f"op={meta.get('op','')}  lookback={meta.get('lookback')}  "
             f"(total samples={self._model.n_samples})"
         )
 
@@ -316,27 +321,25 @@ class Learner:
     def rank_candidates(self, candidates: list[dict]) -> list[dict]:
         """
         Sort candidates by predicted Sharpe + exploration bonus (descending).
-        The queue will process the most promising ones first.
-
-        Falls back to random shuffle if model has fewer than 5 samples
-        (not enough data to predict reliably yet).
+        Thread-safe: acquires lock before reading model weights.
         """
-        if self._model.n_samples < 5:
-            import random
-            logger.info("Learner: insufficient history — using random ordering.")
-            shuffled = candidates[:]
-            random.shuffle(shuffled)
-            return shuffled
+        with self._lock:
+            if self._model.n_samples < 5:
+                import random
+                logger.info("Learner: insufficient history — using random ordering.")
+                shuffled = candidates[:]
+                random.shuffle(shuffled)
+                return shuffled
 
-        scored = [(self.score(c), c) for c in candidates]
-        scored.sort(key=lambda t: t[0], reverse=True)
+            scored = [(self.score(c), c) for c in candidates]
+            scored.sort(key=lambda t: t[0], reverse=True)
 
-        logger.info(
-            f"Learner: ranked {len(candidates)} candidates. "
-            f"Top predicted sharpe: {scored[0][0]:.3f}  "
-            f"Bottom: {scored[-1][0]:.3f}"
-        )
-        return [c for _, c in scored]
+            logger.info(
+                f"Learner: ranked {len(candidates)} candidates. "
+                f"Top predicted sharpe: {scored[0][0]:.3f}  "
+                f"Bottom: {scored[-1][0]:.3f}"
+            )
+            return [c for _, c in scored]
 
     # ──────────────────────────────────────────────────────────────
     # Diagnostics

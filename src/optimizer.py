@@ -29,6 +29,7 @@ import json
 import math
 import random
 import logging
+import threading
 from collections import defaultdict
 from pathlib import Path
 
@@ -102,6 +103,9 @@ class AdaptiveOptimizer:
         # Ensemble memory: store promising alphas that failed but are good building blocks
         self._ensemble_pool: list[dict] = []
 
+        # Thread safety for visited set (prevents duplicate submissions from parallel workers)
+        self._visited_lock = threading.Lock()
+
     # ──────────────────────────────────────────────────────────────────
     # Visited-set management
     # ──────────────────────────────────────────────────────────────────
@@ -115,13 +119,16 @@ class AdaptiveOptimizer:
 
     def save_visited(self):
         """Persist visited set to disk so it survives across runs."""
-        VISITED_FILE.write_text(json.dumps(sorted(self._visited), indent=2))
+        with self._visited_lock:
+            VISITED_FILE.write_text(json.dumps(sorted(self._visited), indent=2))
 
     def mark_visited(self, expr: str):
-        self._visited.add(expr)
+        with self._visited_lock:
+            self._visited.add(expr)
 
     def is_visited(self, expr: str) -> bool:
-        return expr in self._visited
+        with self._visited_lock:
+            return expr in self._visited
 
     # ──────────────────────────────────────────────────────────────────
     # Operator scheduling — round-robin + UCB bias

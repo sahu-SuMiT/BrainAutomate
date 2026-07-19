@@ -27,7 +27,9 @@ Suspicion avoidance
 import time
 import queue
 import random
+import threading
 import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from src.logger import setup_logger
 from src.result_logger import ResultLogger
@@ -89,6 +91,8 @@ class AlphaAutomation:
         self._ramp_up_limit        = random.randint(3, 8)  # randomized, not fixed at 5
         self._consecutive_failures = 0    # for circuit breaker
         self._circuit_open         = False
+        self._circuit_lock         = threading.Lock()   # thread-safe circuit breaker
+        self._feedback_lock        = threading.Lock()   # thread-safe learner + queue updates
 
     # ------------------------------------------------------------------
     # Queue management
@@ -112,145 +116,168 @@ class AlphaAutomation:
     # Core runner
     # ------------------------------------------------------------------
 
-    def run_with_backoff(self, max_retries: int = 5, base_delay: float = 30.0):
+    def run_with_backoff(self, max_retries: int = 5, base_delay: float = 30.0,
+                         n_workers: int = 3):
         """
-        Drain the queue with full error handling, circuit breaker, and jitter.
+        Drain the queue using up to n_workers parallel threads.
+        
+        Architecture:
+        - Each worker independently polls its own simulation (I/O-bound, no GIL issue)
+        - Submissions are serialized by Guardian._submit_lock (one at a time)
+        - Learner updates and queue mutations are serialized by _feedback_lock
+        - Circuit breaker is protected by _circuit_lock
         """
-        while not self.task_queue.empty():
+        def worker():
+            """One worker thread: pull alpha, submit, poll, process feedback."""
+            while True:
+                # Check circuit breaker before taking work
+                with self._circuit_lock:
+                    if self._circuit_open:
+                        logger.warning(
+                            f"Circuit breaker OPEN. Cooling down for {CIRCUIT_BREAKER_PAUSE}s…"
+                        )
+                        # Release lock during sleep so other threads aren't blocked
+                        is_open = True
+                    else:
+                        is_open = False
 
-            # ── Circuit breaker check ──────────────────────────────────
-            if self._circuit_open:
-                logger.warning(
-                    f"Circuit breaker OPEN after {CIRCUIT_BREAKER_LIMIT} consecutive "
-                    f"failures. Cooling down for {CIRCUIT_BREAKER_PAUSE}s…"
+                if is_open:
+                    time.sleep(_jitter(CIRCUIT_BREAKER_PAUSE))
+                    with self._circuit_lock:
+                        self._circuit_open         = False
+                        self._consecutive_failures = 0
+                    logger.info("Circuit breaker reset. Resuming.")
+
+                try:
+                    alpha = self.task_queue.get(block=False)
+                except queue.Empty:
+                    break   # Queue drained — this worker is done
+
+                name = alpha.get("name", "unnamed")
+
+                # Human-like random skip: ~3% chance
+                if random.random() < 0.03:
+                    logger.info(f"[{name}] Randomly skipped (human-like behavior).")
+                    self.task_queue.task_done()
+                    continue
+
+                success, sim_id, details, skip_reason = self._process_with_retry(
+                    alpha, name, max_retries, base_delay
                 )
-                time.sleep(_jitter(CIRCUIT_BREAKER_PAUSE))
-                self._circuit_open        = False
-                self._consecutive_failures = 0
-                logger.info("Circuit breaker reset. Resuming queue.")
 
-            alpha = self.task_queue.get()
-            name  = alpha.get("name", "unnamed")
+                # ── Extract metrics ───────────────────────────────────
+                metrics = {}
+                alpha_summary = (details or {}).get("alpha", {}) if success else {}
+                if alpha_summary:
+                    metrics = {
+                        "sharpe":   alpha_summary.get("sharpe"),
+                        "fitness":  alpha_summary.get("fitness"),
+                        "turnover": alpha_summary.get("turnover"),
+                        "margin":   alpha_summary.get("margin"),
+                    }
+                elif details and "error" in details:
+                    metrics = {"error_message": details.get("error")}
 
-            # Human-like random skip: ~3% chance to drop an item and move on
-            # (mimics a researcher changing their mind mid-session)
-            if random.random() < 0.03:
-                logger.info(f"[{name}] Randomly skipped (human-like behavior).")
-                self.task_queue.task_done()
-                continue
+                tests      = (details or {}).get("checks", [])
+                tests_pass = self._all_checks_pass(name, tests)
+                quality_ok = self._meets_thresholds(name, metrics)
 
-            success, sim_id, details, skip_reason = self._process_with_retry(
-                alpha, name, max_retries, base_delay
-            )
+                submitted = False
+                if success and tests_pass and quality_ok and self.auto_submit:
+                    alpha_id = (details or {}).get("alpha", {}).get("id")
+                    if alpha_id:
+                        submitted = self._try_submit(name, alpha_id)
 
-            # ── Extract metrics ───────────────────────────────────────
-            metrics = {}
-            alpha_summary = (details or {}).get("alpha", {}) if success else {}
+                if skip_reason:
+                    status_label = f"SKIPPED:{skip_reason}"
+                elif not success:
+                    status_label = "FAILED"
+                elif success and tests_pass and quality_ok:
+                    status_label = "SUBMITTED" if submitted else "QUALIFIES"
+                elif success and not tests_pass:
+                    status_label = "TEST_FAIL"
+                else:
+                    status_label = "BELOW_THRESHOLD"
 
-            if alpha_summary:
-                metrics = {
-                    "sharpe":   alpha_summary.get("sharpe"),
-                    "fitness":  alpha_summary.get("fitness"),
-                    "turnover": alpha_summary.get("turnover"),
-                    "margin":   alpha_summary.get("margin"),
-                }
-            elif details and "error" in details:
-                metrics = {"error_message": details.get("error")}
+                logger.info(f"[{'\u2713' if success else '\u2717'}] {name} → {status_label}")
 
-            # ── Test case inspection ──────────────────────────────────
-            tests      = (details or {}).get("checks", [])
-            tests_pass = self._all_checks_pass(name, tests)
+                # ── Circuit breaker ───────────────────────────────────
+                with self._circuit_lock:
+                    if status_label.startswith("FAILED") or status_label.startswith("SKIPPED"):
+                        self._consecutive_failures += 1
+                        if self._consecutive_failures >= CIRCUIT_BREAKER_LIMIT:
+                            self._circuit_open = True
+                    else:
+                        self._consecutive_failures = 0
 
-            # ── Quality threshold ─────────────────────────────────────
-            quality_ok = self._meets_thresholds(name, metrics)
-
-            # ── Auto-submit decision ──────────────────────────────────
-            submitted = False
-            if success and tests_pass and quality_ok and self.auto_submit:
-                alpha_id = (details or {}).get("alpha", {}).get("id")
-                if alpha_id:
-                    submitted = self._try_submit(name, alpha_id)
-
-            # ── Status label ──────────────────────────────────────────
-            if skip_reason:
-                status_label = f"SKIPPED:{skip_reason}"
-            elif not success:
-                status_label = "FAILED"
-            elif success and tests_pass and quality_ok:
-                status_label = "SUBMITTED" if submitted else "QUALIFIES"
-            elif success and not tests_pass:
-                status_label = "TEST_FAIL"
-            else:
-                status_label = "BELOW_THRESHOLD"
-
-            logger.info(f"[{'✓' if success else '✗'}] {name} → {status_label}")
-
-            # ── Update circuit breaker counter ────────────────────────
-            if status_label.startswith("FAILED") or status_label.startswith("SKIPPED"):
-                self._consecutive_failures += 1
-                if self._consecutive_failures >= CIRCUIT_BREAKER_LIMIT:
-                    self._circuit_open = True
-            else:
-                self._consecutive_failures = 0  # reset on any non-failure
-
-            # ── Learner + optimizer feedback ──────────────────────────
-            sharpe = metrics.get("sharpe")
-            if self.optimizer is not None:
-                op = alpha.get("_meta", {}).get("op")
-                if op:
-                    self.optimizer.record_result(op, sharpe)
-
-                if status_label == "BELOW_THRESHOLD" and sharpe is not None:
-                    for r in self.optimizer.refine_near_miss(alpha, sharpe):
-                        self.task_queue.put(r)
-                    for c in self.optimizer.hill_climb_settings(alpha, sharpe):
-                        self.task_queue.put(c)
-
-                # 1. Negation Trick (flip highly negative smooth curves)
+                # ── Feedback: learner + optimizer (serialized) ────────
+                sharpe  = metrics.get("sharpe")
                 fitness = metrics.get("fitness")
-                if sharpe is not None and sharpe <= -1.0 and fitness is not None and fitness < 0:
-                    for n in self.optimizer.flip_negative_alpha(alpha, sharpe):
-                        self.task_queue.put(n)
-                        
-                # 2. Ensemble Trick (combine orthogonal partial successes)
-                if success and tests:
-                    passed_tests = [c for c in tests if c.get("result") == "PASS"]
-                    # If it passed multiple checks but didn't qualify overall
-                    if len(passed_tests) >= 3 and not (tests_pass and quality_ok):
-                        self.optimizer.add_to_ensemble(alpha)
-                        if len(self.optimizer._ensemble_pool) >= 5:
-                            for e in self.optimizer.generate_ensembles():
-                                self.task_queue.put(e)
 
-                self.optimizer.save_visited()
+                with self._feedback_lock:
+                    if self.optimizer is not None:
+                        op = alpha.get("_meta", {}).get("op")
+                        if op:
+                            self.optimizer.record_result(op, sharpe)
 
-            if self.learner is not None:
-                self.learner.record(alpha, sharpe, metrics.get("fitness"), metrics.get("turnover"))
+                        if status_label == "BELOW_THRESHOLD" and sharpe is not None:
+                            for r in self.optimizer.refine_near_miss(alpha, sharpe):
+                                self.task_queue.put(r)
+                            for c in self.optimizer.hill_climb_settings(alpha, sharpe):
+                                self.task_queue.put(c)
 
-                q_size = self.task_queue.qsize()
-                n_done = self.learner._model.n_samples
-                if q_size > 1 and n_done > 0 and n_done % 20 == 0:
-                    logger.info(f"Re-ranking {q_size} remaining queue items…")
-                    remaining = []
-                    while not self.task_queue.empty():
-                        remaining.append(self.task_queue.get_nowait())
-                    for item in self.learner.rank_candidates(remaining):
-                        self.task_queue.put(item)
+                        if sharpe is not None and sharpe <= -1.0 and fitness is not None and fitness < 0:
+                            for neg in self.optimizer.flip_negative_alpha(alpha, sharpe):
+                                self.task_queue.put(neg)
 
-            # ── Guardian toxic tracker ────────────────────────────────
-            if self.guardian is not None:
-                self.guardian.post_result(alpha, status_label)
+                        if success and tests:
+                            passed_tests = [c for c in tests if c.get("result") == "PASS"]
+                            if len(passed_tests) >= 3 and not (tests_pass and quality_ok):
+                                self.optimizer.add_to_ensemble(alpha)
+                                if len(self.optimizer._ensemble_pool) >= 5:
+                                    for e in self.optimizer.generate_ensembles():
+                                        self.task_queue.put(e)
 
-            metrics["tests_pass"]  = tests_pass
-            metrics["auto_submit"] = submitted
-            self.result_logger.record(
-                alpha_name=name,
-                sim_id=sim_id or "N/A",
-                status=status_label,
-                details=metrics,
-            )
+                        self.optimizer.save_visited()
 
-            self.task_queue.task_done()
+                    if self.learner is not None:
+                        self.learner.record(alpha, sharpe, metrics.get("fitness"), metrics.get("turnover"))
+
+                        q_size = self.task_queue.qsize()
+                        n_done = self.learner._model.n_samples
+                        if q_size > 1 and n_done > 0 and n_done % 20 == 0:
+                            logger.info(f"Re-ranking {q_size} remaining queue items…")
+                            remaining = []
+                            while not self.task_queue.empty():
+                                try:
+                                    remaining.append(self.task_queue.get_nowait())
+                                except queue.Empty:
+                                    break
+                            for item in self.learner.rank_candidates(remaining):
+                                self.task_queue.put(item)
+
+                    if self.guardian is not None:
+                        self.guardian.post_result(alpha, status_label)
+
+                metrics["tests_pass"]  = tests_pass
+                metrics["auto_submit"] = submitted
+                self.result_logger.record(
+                    alpha_name=name,
+                    sim_id=sim_id or "N/A",
+                    status=status_label,
+                    details=metrics,
+                )
+
+                self.task_queue.task_done()
+
+        logger.info(f"Starting parallel run with {n_workers} workers, {self.task_queue.qsize()} queued alphas.")
+        with ThreadPoolExecutor(max_workers=n_workers) as pool:
+            futures = [pool.submit(worker) for _ in range(n_workers)]
+            for f in as_completed(futures):
+                exc = f.exception()
+                if exc:
+                    logger.error(f"Worker thread crashed: {exc}", exc_info=exc)
+        logger.info("All workers finished. Queue drained.")
 
     # ------------------------------------------------------------------
     # Test-case + threshold checks (unchanged from previous version)
