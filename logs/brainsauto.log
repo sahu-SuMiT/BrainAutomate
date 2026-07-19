@@ -3724,3 +3724,123 @@
 2026-07-19 17:30:09  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
 2026-07-19 17:30:13  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
 2026-07-19 17:30:18  INFO      [src.automation]  [res_model_562] UNKNOWN (35.0%)
+2026-07-19 17:30:24  INFO      [src.automation]  [res_model_562] COMPLETE
+2026-07-19 17:30:24  WARNING   [src.automation]  [res_model_562] ✗ Failed checks: LOW_SHARPE, LOW_FITNESS, LOW_SUB_UNIVERSE_SHARPE
+2026-07-19 17:30:24  INFO      [src.automation]  [res_model_562] Sharpe 0.460 below threshold
+2026-07-19 17:30:24  INFO      [src.automation]  [res_model_562] Fitness 0.150 below threshold
+2026-07-19 17:30:24  INFO      [src.automation]  [res_model_562] Margin 0.00088 too low
+2026-07-19 17:30:24  INFO      [src.automation]  [✓] res_model_562 → TEST_FAIL
+2026-07-19 17:30:25  INFO      [src.automation]  [val_model_683] Polling simulation 2OFlt82z456Z98ZjeYwZQU7…
+2026-07-19 17:30:25  INFO      [src.automation]  [val_model_683] UNKNOWN (10.0%)
+2026-07-19 17:30:31  INFO      [src.automation]  [val_model_683] UNKNOWN (10.0%)
+2026-07-19 17:30:36  INFO      [src.automation]  [val_model_683] UNKNOWN (10.0%)
+2026-07-19 17:30:42  INFO      [src.automation]  [val_model_683] UNKNOWN (10.0%)
+2026-07-19 17:30:47  INFO      [src.automation]  [val_model_683] UNKNOWN (15.0%)
+2026-07-19 17:30:54  INFO      [src.automation]  [val_model_683] UNKNOWN (15.0%)
+2026-07-19 17:30:58  INFO      [src.automation]  [val_model_683] UNKNOWN (15.0%)
+2026-07-19 17:31:02  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:09  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:16  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:21  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:27  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:31  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:38  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:43  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:48  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:55  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:31:59  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:32:07  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:32:14  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:32:19  INFO      [src.automation]  [val_model_683] UNKNOWN (35.0%)
+2026-07-19 17:32:26  INFO      [src.automation]  [val_model_683] COMPLETE
+2026-07-19 17:32:26  WARNING   [src.automation]  [val_model_683] ✗ Failed checks: LOW_SHARPE, LOW_FITNESS, LOW_TURNOVER
+2026-07-19 17:32:26  INFO      [src.automation]  [val_model_683] Sharpe 0.560 below threshold
+2026-07-19 17:32:26  INFO      [src.automation]  [val_model_683] Fitness 0.350 below threshold
+2026-07-19 17:32:26  INFO      [src.automation]  [✓] val_model_683 → TEST_FAIL
+2026-07-19 17:32:27  INFO      [src.automation]  [val_v2_619] Polling simulation 1ffhuVwY4ybbENTCnBHrtr…
+2026-07-19 17:32:27  INFO      [src.automation]  [val_v2_619] UNKNOWN (10.0%)
+2026-07-19 17:32:34  INFO      [src.automation]  [val_v2_619] UNKNOWN (15.0%)
+2026-07-19 17:32:47  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:32:53  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:32:59  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:04  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:10  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:15  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:19  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:23  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:29  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:36  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:41  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:48  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:55  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:33:59  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:34:06  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:34:13  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:34:20  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:34:25  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:34:28  INFO      [src.automation]  [val_v2_619] UNKNOWN (35.0%)
+2026-07-19 17:34:32  INFO      [src.automation]  [val_v2_619] COMPLETE
+2026-07-19 17:34:33  WARNING   [src.automation]  [val_v2_619] ✗ Failed checks: LOW_SHARPE, LOW_FITNESS
+2026-07-19 17:34:33  INFO      [src.automation]  [val_v2_619] Sharpe 0.000 below threshold
+2026-07-19 17:34:33  INFO      [src.automation]  [val_v2_619] Fitness 0.000 below threshold
+2026-07-19 17:34:33  INFO      [src.automation]  [val_v2_619] Margin 0.00001 too low
+2026-07-19 17:34:33  INFO      [src.automation]  [✓] val_v2_619 → TEST_FAIL
+2026-07-19 17:34:33  INFO      [src.automation]  Re-ranking 253 remaining queue items…
+2026-07-19 17:34:34  INFO      [src.automation]  [val_run_590] Polling simulation 2Es96gDa4JNcj0kn79sHSh…
+2026-07-19 17:34:34  INFO      [src.automation]  [val_run_590] UNKNOWN (10.0%)
+2026-07-19 17:34:39  INFO      [src.automation]  [val_run_590] UNKNOWN (15.0%)
+2026-07-19 17:34:46  INFO      [src.automation]  [val_run_590] UNKNOWN (15.0%)
+2026-07-19 17:34:51  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:34:55  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:00  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:05  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:12  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:16  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:20  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:26  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:30  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:35  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:42  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:48  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 17:35:54  INFO      [src.automation]  [val_run_590] UNKNOWN (35.0%)
+2026-07-19 18:03:06  WARNING   [src.automation]  [val_run_590] Poll error #1: HTTPSConnectionPool(host='api.worldquantbrain.com', port=443): Read timed out. (read timeout=20)
+2026-07-19 18:03:13  INFO      [src.automation]  [val_run_590] COMPLETE
+2026-07-19 18:03:13  WARNING   [src.automation]  [val_run_590] ✗ Failed checks: LOW_SHARPE, LOW_FITNESS, LOW_TURNOVER
+2026-07-19 18:03:13  INFO      [src.automation]  [val_run_590] Sharpe 0.520 below threshold
+2026-07-19 18:03:13  INFO      [src.automation]  [val_run_590] Fitness 0.320 below threshold
+2026-07-19 18:03:13  INFO      [src.automation]  [✓] val_run_590 → TEST_FAIL
+2026-07-19 18:03:13  INFO      [src.automation]  [sig_run_329] Polling simulation 35fSI56g74Vxbzk16lHWKMak…
+2026-07-19 18:03:14  INFO      [src.automation]  [sig_run_329] UNKNOWN (10.0%)
+2026-07-19 18:03:18  INFO      [src.automation]  [sig_run_329] UNKNOWN (10.0%)
+2026-07-19 18:03:22  INFO      [src.automation]  [sig_run_329] UNKNOWN (10.0%)
+2026-07-19 18:03:27  INFO      [src.automation]  [sig_run_329] UNKNOWN (15.0%)
+2026-07-19 18:03:32  INFO      [src.automation]  [sig_run_329] UNKNOWN (15.0%)
+2026-07-19 18:03:36  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:03:40  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:03:46  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:03:50  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:03:55  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:03:59  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:06  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:10  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:14  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:17  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:24  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:32  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:38  INFO      [src.automation]  [sig_run_329] UNKNOWN (35.0%)
+2026-07-19 18:04:42  INFO      [src.automation]  [sig_run_329] UNKNOWN (80.0%)
+2026-07-19 18:04:46  INFO      [src.automation]  [sig_run_329] COMPLETE
+2026-07-19 18:04:46  WARNING   [src.automation]  [sig_run_329] ✗ Failed checks: LOW_SHARPE, LOW_FITNESS, LOW_TURNOVER, LOW_SUB_UNIVERSE_SHARPE
+2026-07-19 18:04:46  INFO      [src.automation]  [sig_run_329] Sharpe 0.350 below threshold
+2026-07-19 18:04:46  INFO      [src.automation]  [sig_run_329] Fitness 0.210 below threshold
+2026-07-19 18:04:46  INFO      [src.automation]  [✓] sig_run_329 → TEST_FAIL
+2026-07-19 18:04:47  INFO      [src.automation]  [adp_model_694] Polling simulation 4mYUsy7WN4QicKS4rSs1L76…
+2026-07-19 18:04:50  INFO      [src.automation]  [adp_model_694] UNKNOWN (15.0%)
+2026-07-19 18:04:58  INFO      [src.automation]  [adp_model_694] UNKNOWN (15.0%)
+2026-07-19 18:05:04  INFO      [src.automation]  [adp_model_694] UNKNOWN (15.0%)
+2026-07-19 18:05:10  INFO      [src.automation]  [adp_model_694] UNKNOWN (35.0%)
+2026-07-19 18:05:16  INFO      [src.automation]  [adp_model_694] UNKNOWN (35.0%)
+2026-07-19 18:05:20  INFO      [src.automation]  [adp_model_694] UNKNOWN (35.0%)
+2026-07-19 18:05:25  INFO      [src.automation]  [adp_model_694] UNKNOWN (35.0%)
+2026-07-19 18:05:30  INFO      [src.automation]  [adp_model_694] UNKNOWN (35.0%)
+2026-07-19 18:05:36  INFO      [src.automation]  [adp_model_694] UNKNOWN (35.0%)
